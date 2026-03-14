@@ -17,7 +17,7 @@ from .tool import (
 )
 
 
-# Sentinel to signal end of stream
+
 END_OF_STREAM = object()
 
 
@@ -76,15 +76,15 @@ async def generate_responses(input: str) -> AsyncGenerator[str, None]:
     queue: asyncio.Queue[str | object] = asyncio.Queue()
 
     with trace("Deep Research", trace_id=trace_id):
-        # Start run_agent as a background task
+        
         task = asyncio.create_task(run_agent(input, queue))
 
-        # Yield messages as they arrive
+        
         while True:
             message = await queue.get()
             if message is END_OF_STREAM:
                 break
-            yield message  # type: ignore[misc]
+            yield message  
 
-        # Ensure task completes (propagate any exceptions)
+      
         await task
